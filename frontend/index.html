@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#070b12" />
+  <title>FactoryWatch — Industrial Sensor Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/animations.css" />
+</head>
+<body>
+  <div id="boot" class="boot-screen"><div class="boot-mark"><span class="mark-bars"><i></i><i></i><i></i><i></i></span><span>FACTORY<span>WATCH</span></span></div><div class="boot-line"><b></b></div><p>INITIALIZING SENSOR FABRIC <em id="bootPercent">0%</em></p></div>
+  <div class="ambient-grid"></div>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark"><i></i><i></i><i></i><i></i></div><div><strong>FACTORY<span>WATCH</span></strong><small>INDUSTRIAL SENSOR INTELLIGENCE</small></div></div>
+      <div class="topbar-meta"><div class="live-state"><span class="pulse-dot"></span><span id="connectionText">LIVE CONNECTION</span></div><div class="clock" id="clock">--:--:--</div><div class="mode-chip" id="monitorMode">STANDBY</div></div>
+    </header>
+
+    <section class="hero-row reveal"><div><p class="eyebrow">/ OPERATIONS CONTROL · NODE FW-07</p><h1>Temperature telemetry,<br><span>made explainable.</span></h1><p class="hero-copy">A live view into sliding-window intelligence for the modern factory floor.</p></div><div class="hero-readout"><span>ACTIVE STREAM</span><strong id="heroReadout">--°</strong><small id="heroReadoutLabel">Awaiting analysis</small></div></section>
+
+    <section class="stats-grid reveal delay-1">
+      <article class="stat-card"><span class="stat-label">TOTAL READINGS</span><strong id="statReadings">0</strong><small>sensor points ingested</small></article>
+      <article class="stat-card"><span class="stat-label">WINDOWS PROCESSED</span><strong id="statWindows">0</strong><small>complete windows</small></article>
+      <article class="stat-card danger"><span class="stat-label">HIGH ALERTS</span><strong id="statHigh">0</strong><small>above threshold</small></article>
+      <article class="stat-card warning"><span class="stat-label">LOW ALERTS</span><strong id="statLow">0</strong><small>below threshold</small></article>
+      <article class="stat-card status-card"><span class="stat-label">SYSTEM STATUS</span><strong id="statStatus">STANDBY</strong><small><span class="mini-dot"></span> monitoring fabric</small></article>
+    </section>
+
+    <section class="workspace reveal delay-2">
+      <aside class="control-panel panel"><div class="panel-heading"><div><p class="eyebrow">01 / CONFIGURE</p><h2>Sensor protocol</h2></div><span class="panel-index">FW·01</span></div>
+        <label>READINGS <textarea id="readingsInput" spellcheck="false">4, 1, 7, 3, 6, 11, 8, 2, 9, 5, 13, 4, 6, 10, 1, 7, 12, 3</textarea></label>
+        <div class="field-grid"><label>WINDOW K<input id="windowInput" type="number" min="1" value="3"></label><label>REPLAY SPEED<select id="speedInput"><option value="1000">1× / 1 sec</option><option value="600">1.6× / 0.6 sec</option><option value="300">3× / 0.3 sec</option></select></label></div>
+        <div class="field-grid"><label>HIGH THRESHOLD<input id="highInput" type="number" value="8"></label><label>LOW THRESHOLD<input id="lowInput" type="number" value="2"></label></div>
+        <div class="button-stack"><button class="primary-btn" id="analyzeBtn"><span>ANALYZE STREAM</span><b>↗</b></button><div class="button-row"><button class="ghost-btn" id="sampleBtn">LOAD SAMPLE</button><button class="ghost-btn" id="resetBtn">RESET</button></div></div>
+        <div class="upload-zone"><span class="upload-icon">⇧</span><div><strong>DROP CSV DATA</strong><small>or browse a local file</small></div><input id="csvInput" type="file" accept=".csv,text/csv"></div>
+        <div class="sound-row"><span>ALERT SOUND</span><button id="soundToggle" class="toggle" aria-label="Toggle alert sound"><i></i></button><span id="soundLabel">OFF</span></div>
+      </aside>
+
+      <div class="main-column">
+        <article class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">02 / TELEMETRY</p><h2>Temperature trace <span class="live-tag">● LIVE</span></h2></div><div class="chart-legend"><span><i class="legend-line cyan"></i>READING</span><span><i class="legend-line red"></i>HIGH</span><span><i class="legend-line amber"></i>LOW</span></div></div><div class="chart-wrap"><canvas id="chartCanvas"></canvas><div id="chartEmpty" class="chart-empty">Run analysis to render telemetry</div></div><div class="chart-footer"><div><span>CURRENT TEMP</span><strong id="currentTemp">--°</strong></div><div><span>THRESHOLD BAND</span><strong id="thresholdBand">-- / --</strong></div><div><span>ALGORITHM</span><strong class="mono">MONO-DEQUE / O(N)</strong></div></div></article>
+        <div class="lower-grid"><article class="panel replay-panel"><div class="panel-heading"><div><p class="eyebrow">03 / SIMULATION</p><h2>Live sensor replay</h2></div><span class="replay-state" id="replayState">PAUSED</span></div><div class="replay-visual"><div class="replay-scan"></div><div class="sensor-core"><span>FW</span><b id="replayValue">--</b><small>°C</small></div><div class="replay-track"><i id="replayProgress"></i></div></div><div class="replay-controls"><button class="control-btn start" id="startBtn">▶ START</button><button class="control-btn" id="pauseBtn">Ⅱ PAUSE</button><button class="control-btn" id="resumeBtn">▶ RESUME</button><button class="control-btn" id="replayResetBtn">↺ RESET</button></div></article>
+          <article class="panel deque-panel"><div class="panel-heading"><div><p class="eyebrow">04 / DSA TRACE</p><h2>Monotonic deques</h2></div><span class="panel-index">O(N)</span></div><div class="deque-block"><div class="deque-title"><span class="cyan-text">MAX DEQUE</span><small>decreasing order</small></div><div class="deque-values" id="maxDeque"><span>—</span></div></div><div class="deque-block"><div class="deque-title"><span class="amber-text">MIN DEQUE</span><small>increasing order</small></div><div class="deque-values amber" id="minDeque"><span>—</span></div></div><div class="deque-meta"><span>INDEX <b id="dequeIndex">--</b></span><span>EXPIRED <b id="dequeExpired">--</b></span><span>REAR DEL <b id="rearDeletes">--</b></span></div></article></div>
+      </div>
+    </section>
+
+    <section class="data-grid reveal delay-3"><article class="panel table-panel"><div class="panel-heading"><div><p class="eyebrow">05 / WINDOW OUTPUT</p><h2>Sliding-window results</h2></div><button class="text-btn" id="downloadBtn">DOWNLOAD CSV ↓</button></div><div class="table-scroll"><table><thead><tr><th>WINDOW</th><th>READINGS</th><th>MAX</th><th>MIN</th><th>ALERTS</th><th>STATUS</th></tr></thead><tbody id="resultsBody"><tr><td colspan="6" class="empty-cell">No complete windows yet. Configure the stream and analyze.</td></tr></tbody></table></div></article><aside class="panel alert-panel"><div class="panel-heading"><div><p class="eyebrow">06 / ALERT CENTER</p><h2>Event feed</h2></div><span class="alert-count" id="alertCount">0 EVENTS</span></div><div id="alertFeed" class="alert-feed"><div class="feed-empty">No alert events<br><small>System is standing by.</small></div></div></aside></section>
+    <footer><span>FACTORYWATCH / SENSOR INTELLIGENCE PLATFORM</span><span>DSA HACKATHON BUILD <b>·</b> V1.0.0</span></footer>
+  </main><div id="toast" class="toast"></div><script src="/script.js"></script>
+</body>
+</html>
